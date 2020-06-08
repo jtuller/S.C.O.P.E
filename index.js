@@ -3,6 +3,7 @@ const client = new Discord.Client();
 const numeral = require("numeral");
 const config = require("./config.json");
 const prefix = config.prefix;
+
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -27,8 +28,80 @@ client.on("message", async (message) => {
         },
       });
       break;
+    case "help":
+      message.channel.send({
+        embed: {
+          color: 3447003,
+          description: `Hi there! I'm **S.C.O.P.E.** or, *"Specific Calculation Of Power from EiTS
+          I am a bot created by Grand Moff for Visual Utopia!`,
+        },
+      });
+      message.channel.send({
+        embed: {
+          color: 3447003,
+          description: `I Currently have two Commands:
+            > !Dice
+            *This will give you a random roll of the dice 0-100*
+            > !eits !mil:# !mag:# 
+            > eits-results-pasted-here    
+            *this will give you the SCOPE of an Eye in the sky!*
+             `,
+        },
+      });
+      message.channel.send({
+        embed: {
+          color: 3447003,
+          description: `If you're interested in helping out or have any ideas, here's a link to my repository on github:
+          https://github.com/CTFries/S.C.O.P.E`,
+        },
+      });
+      break;
     case "eits":
+      let cost = 0;
+      let op = 0;
+      let dp = 0;
       let results = args;
+      let military =
+        results
+          .substr(0, results.search("\n"))
+          .trim()
+          .toLowerCase()
+          .search("!mil:") > -1
+          ? parseInt(
+              results
+                .substr(
+                  results
+                    .substr(0, results.search("\n"))
+                    .trim()
+                    .toLowerCase()
+                    .search("!mil:") + 6,
+                  2
+                )
+                .trim(),
+              10
+            )
+          : 0;
+      military = Number.isInteger(military) ? military : 0;
+      let magic =
+        results
+          .substr(0, results.search("\n"))
+          .trim()
+          .toLowerCase()
+          .search("!mag:") > -1
+          ? parseInt(
+              results.substr(
+                results
+                  .substr(0, results.search("\n"))
+                  .trim()
+                  .toLowerCase()
+                  .search("!mag:") + 6,
+                2
+              ),
+              10
+            )
+          : 0;
+      magic = Number.isInteger(magic) ? magic : 0;
+
       const races = {
         Human: [
           {
@@ -61,6 +134,12 @@ client.on("message", async (message) => {
             op: 40,
             dp: 20,
           },
+          {
+            name: "Peasants",
+            cost: 0,
+            op: 0,
+            dp: 0.5,
+          },
         ],
         Elf: [
           {
@@ -90,8 +169,14 @@ client.on("message", async (message) => {
           {
             name: "Archmages",
             cost: 4000,
-            op: "3 time magic science",
-            dp: "3 time magic science",
+            op: 3 * magic,
+            dp: 3 * magic,
+          },
+          {
+            name: "Peasants",
+            cost: 0,
+            op: 0,
+            dp: 0.5,
           },
         ],
         Orc: [
@@ -125,6 +210,12 @@ client.on("message", async (message) => {
             op: 160,
             dp: 160,
           },
+          {
+            name: "Peasants",
+            cost: 0,
+            op: 0,
+            dp: 0.5,
+          },
         ],
         Dwarf: [
           {
@@ -156,6 +247,12 @@ client.on("message", async (message) => {
             cost: 1000,
             op: 6,
             dp: 3,
+          },
+          {
+            name: "Peasants",
+            cost: 0,
+            op: 0,
+            dp: 0.5,
           },
         ],
         Troll: [
@@ -189,6 +286,12 @@ client.on("message", async (message) => {
             op: 35,
             dp: 35,
           },
+          {
+            name: "Peasants",
+            cost: 0,
+            op: 0,
+            dp: 0.5,
+          },
         ],
         Halfling: [
           {
@@ -221,6 +324,12 @@ client.on("message", async (message) => {
             op: 8,
             dp: 8,
           },
+          {
+            name: "Peasants",
+            cost: 0,
+            op: 0,
+            dp: 0.5,
+          },
         ],
       };
       function raceIdentify(i) {
@@ -238,11 +347,6 @@ client.on("message", async (message) => {
           return "Halfling";
         }
       }
-      let cost = 0;
-      let op = 0;
-      let dp = 0;
-      const magic = 6;
-      const military = 0;
       // Identifies Race
       const race = raceIdentify(results);
       // Identifies Army or City
@@ -253,26 +357,30 @@ client.on("message", async (message) => {
       const cityTrim = isArmy ? 0 : results.search("Armies in") - 4;
       results = cityTrim ? results.substr(0, cityTrim) : results;
       let resultsObj = races[race];
-      for (i = 0; i < 5; i++) {
+      for (i = 0; i < 6; i++) {
         let unitNamelen = races[race][i]["name"].length;
         let nextDel = results.search("\n");
         let units = results.substr(unitNamelen + 1, nextDel - unitNamelen - 1);
         resultsObj[i].units = units;
         results = results.substring(nextDel + 1, results.length);
       }
-      //calculates Raw OP/DP & Cost
-      for (i = 0; i < 5; i++) {
+      //calculates Raw Unit OP/DP & Cost
+      for (i = 0; i < 6; i++) {
         op = op + resultsObj[i].op * resultsObj[i].units;
         dp = dp + resultsObj[i].dp * resultsObj[i].units;
         cost = cost + resultsObj[i].cost * resultsObj[i].units;
       }
+      op = military ? op * (1 + military / 10) : op;
+      dp = military ? dp * (1 + military / 10) : dp;
       //Output results
       message.channel.send({
         embed: {
           color: 3447003,
-          description: `Cost:${numeral(cost).format("0,0")}\nOP: ${numeral(
-            op
-          ).format("0,0")}\nDP: ${numeral(dp).format("0,0")}`,
+          description: `Mil:${military}\\Mag:${magic} \nCost:${numeral(
+            cost
+          ).format("0,0")}\nOP: ${numeral(op).format("0,0")}\nDP: ${numeral(
+            dp
+          ).format("0,0")}`,
         },
       });
       break;
