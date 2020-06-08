@@ -2,10 +2,13 @@
 
 ## Welcome
 
+I am a discord bot made by Grand Moff of Visual Utopia!
+my name is S.C.O.P.E. or _Specific Calculation Of Power from EiTS_
+
 ## Current Commands!
 
 - `!Dice` will give you a random diceroll between 0 and 100
-- `!EiTS` will allow you to get the S.C.O.P.E. of a city or army. It has two optinoal arugments !Mag:# and !Mil:# and one requires argumen, the results from an EiTS cast
+- `!EiTS` will allow you to get the S.C.O.P.E. of a city or army. It has two optional arugments !Mag:# and !Mil:# and one requires argumen, the results from an EiTS cast
 
 ## Current Bugs
 
