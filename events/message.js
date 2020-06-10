@@ -7,7 +7,10 @@ module.exports = (client, message) => {
   let args = [];
   let command;
   //EITS handled different due to argument being a string
-  if (message.content.toLowerCase().startsWith("!eits")) {
+  if (
+    message.content.toLowerCase().startsWith("!eits") ||
+    message.content.toLowerCase().startsWith("+eits")
+  ) {
     args = [
       "eits",
       message.content

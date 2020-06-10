@@ -100,7 +100,7 @@ module.exports = (client, message, args) => {
           },
           {
             name: "credit",
-            value: "made with :heart: by Grand Moff & Percy",
+            value: "made with :heart: by Grand Moff",
           },
         ],
       },
