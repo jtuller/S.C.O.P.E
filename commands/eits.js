@@ -91,47 +91,28 @@ module.exports = (client, message, args) => {
     //Output results
     message.channel.send({
       embed: {
-        color: 3447003,
-        description: `Requested by: ${message.author}
-        OP/DP with ${military} military and ${magic} magic.
-        `,
-      },
-      embed: {
         color: 2123412,
-        fields: [
-          {
-            name: "EITS Requested by:",
-            value: `${message.author}`,
-          },
-          {
-            name: "Units",
-            value: `${race.u1.name}: ${numeral(units[1]).format("0,0")}\n${
-              race.u2.name
-            }: ${numeral(units[2]).format("0,0")}\n${race.u3.name}: ${numeral(
-              units[3]
-            ).format("0,0")}\n${race.u4.name}: ${numeral(units[4]).format(
-              "0,0"
-            )}\n${race.u5.name}: ${numeral(units[5]).format("0,0")}\n${
-              race.u6.name
-            }: ${numeral(units[6]).format("0,0")}\n${race.u7.name}: ${numeral(
-              units[7]
-            ).format("0,0")}`,
-            inline: false,
-          },
-          {
-            name: "Power",
-            value: `Military: ${military} \nMagic: ${magic} \nCost: ${numeral(
-              cost
-            ).format("0,0")}\nOP: ${numeral(op).format("0,0.0")}\nDP: ${numeral(
-              dp
-            ).format("0,0.0")}`,
-            inline: false,
-          },
-          {
-            name: "credit",
-            value: "made with :heart: by Grand Moff",
-          },
-        ],
+        description: ` EITS Requested by: ${message.author}\n
+            **Units**
+            ${race.u1.name}: ${numeral(units[1]).format("0,0")}\n${
+          race.u2.name
+        }: ${numeral(units[2]).format("0,0")}\n${race.u3.name}: ${numeral(
+          units[3]
+        ).format("0,0")}\n${race.u4.name}: ${numeral(units[4]).format(
+          "0,0"
+        )}\n${race.u5.name}: ${numeral(units[5]).format("0,0")}\n${
+          race.u6.name
+        }: ${numeral(units[6]).format("0,0")}\n${race.u7.name}: ${numeral(
+          units[7]
+        ).format("0,0")}
+            \n**Power**
+            Military: ${military} \nMagic: ${magic} \nCost: ${numeral(
+          cost
+        ).format("0,0")}\nOP: ${numeral(op).format("0,0.0")}\nDP: ${numeral(
+          dp
+        ).format("0,0.0")}
+            /n**credit**
+            made with :heart: by Grand Moff`,
       },
     });
   }
