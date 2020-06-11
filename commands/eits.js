@@ -23,15 +23,15 @@ module.exports = (client, message, args) => {
     message.channel.send({
       embed: {
         color: 2123412,
-        title: "!army",
+        title: "!eits",
         description:
           //prettier-ignore
-          "!Army is the original command! !opdp takes 3 arguments, **1 required**, *2 optional*:\n\
+          "!eits is the original command! !eits takes 3 arguments, **1 required**, *2 optional*:\n\
         > !army *MILSCI MAGSCI* \n\
         > *EITS-PASTE-DUMP-IN-CODE-BLOCK* \n\
         \n\
         An Example: \n\
-        > !Army *2 0*\n\
+        > !eits *2 0*\n\
         > **\\\`\\\`\\\` \n\
         > Army from Test Subject\n\
         > Swordsmen:100 \n\
@@ -62,36 +62,44 @@ module.exports = (client, message, args) => {
       : 0;
     // Identifies Race
     const race = raceIdentify(target);
+    console.log(target);
+    console.log(race);
+    // // Handles elf mess
+    // if (races[race].u5.name === "Archmages") {
+    //   races[race].u5.op = magic * 3;
+    //   races[race].u5.dp = magic * 3;
+    // }
+    // //sets up GT defense
+    // if (races[race].u7.name === "Guard Towers") {
+    //   races[race].u7.op = 0;
+    //   races[race].u7.dp = 5 + military;
+    // }
     // Parses units from parsed results
     //calculates Raw Unit OP/DP & Cost
     const unitsObj = target.replace(/:/g, "\n").split("\n");
     let units = [""];
-    for (i = 1; i < 7; i++) {
+    for (i = 1; i < 8; i++) {
       let unitI = "u".concat(i);
       let unitName = races[race][unitI].name;
       units.push(unitsObj[unitsObj.indexOf(unitName.toLowerCase()) + 1]);
-      console.log(units);
-      op = isNaN(units[i]) ? op : op + units[i] * races[race][unitI].op;
-      dp = isNaN(units[i]) ? dp : dp + units[i] * races[race][unitI].dp;
-      cost = isNaN(units[i]) ? cost : cost + units[i] * races[race][unitI].cost;
+      if (i < 7) {
+        op = isNaN(units[i]) ? op : op + units[i] * races[race][unitI].op;
+        dp = isNaN(units[i]) ? dp : dp + units[i] * races[race][unitI].dp;
+        cost = isNaN(units[i])
+          ? cost
+          : cost + units[i] * races[race][unitI].cost;
+      }
     }
     op = military ? op * (1 + military / 10) : op;
     dp = military ? dp * (1 + military / 10) : dp;
+    dp = units[7] > 0 ? dp + units[7] * (5 + military) : dp;
     //Output results
     message.channel.send({
       embed: {
         color: 3447003,
         description: `Requested by: ${message.author}
-        OP/DP for targetName with ${military} military and ${magic} magic.
-        ${races[race].u1.name}: ${units[1]}
-        ${races[race].u2.name}: ${units[2]}
-        ${races[race].u3.name}: ${units[3]}
-        ${races[race].u4.name}: ${units[4]}
-        ${races[race].u5.name}: ${units[5]}
-        ${races[race].u6.name}: ${units[6]}
-        **Cost:${numeral(cost).format("0,0")}**
-        **OP: ${numeral(op).format("0,0")}**
-        **DP: ${numeral(dp).format("0,0")}**`,
+        OP/DP with ${military} military and ${magic} magic.
+        `,
       },
       embed: {
         color: 2123412,
@@ -101,7 +109,7 @@ module.exports = (client, message, args) => {
             value: `${message.author}`,
           },
           {
-            name: "Army",
+            name: "Units",
             value: `${races[race].u1.name}: ${numeral(units[1]).format(
               "0,0"
             )}\n${races[race].u2.name}: ${numeral(units[2]).format("0,0")}\n${
@@ -112,8 +120,10 @@ module.exports = (client, message, args) => {
               races[race].u5.name
             }: ${numeral(units[5]).format("0,0")}\n${
               races[race].u6.name
-            }: ${numeral(units[6]).format("0,0")}`,
-            inline: true,
+            }: ${numeral(units[6]).format("0,0")}\n${
+              races[race].u7.name
+            }: ${numeral(units[7]).format("0,0")}`,
+            inline: false,
           },
           {
             name: "Power",
@@ -122,7 +132,7 @@ module.exports = (client, message, args) => {
             ).format("0,0")}\nOP: ${numeral(op).format("0,0.0")}\nDP: ${numeral(
               dp
             ).format("0,0.0")}`,
-            inline: true,
+            inline: false,
           },
           {
             name: "credit",
