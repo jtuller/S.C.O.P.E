@@ -1,19 +1,76 @@
+let string = `Army with 270989 soldiers awaiting your orders, Pirate...
+
+Notforyou is defended by 340039 soldiers who seem to be armed with magic weapons and mithril armor. The city is also defended by 19155 peasants. And has 5327 guard stations.
+
+Notforyou has 675 walls, which will increase our preparation time by 9 day(s).
+
+This city has been blessed!
+
+Our strategists say that we currently have around 22% chance for a successful attack or 23% for a successful siege assault.
+
+We have prepared 24 days for this attack. It will take another 2 days before our soldiers are fully prepared.
+
+They have no resources in the city so there is no point in plundering it.`
+let results = []
+let tempString = string.split(`\n`);
+let attackOdds, siegeOdds, wallsAdd, currentPrep, remainingPrep;
+for (s in tempString) {
+    let words = tempString[s].split(` `);
+    if (words.length > 1) {
+        switch (words[words.length - 1]) {
+            case 'day(s).':
+                wallsAdd = words[words.length - 2];
+                console.log(`walls add ${wallsAdd} days`)
+                break
+            case 'assault.':
+                siegeOdds = words[words.length - 6]
+                attackOdds = words[words.length - 13]
+                console.log(`siege odds are ${siegeOdds}`)
+                console.log(`attack odds are ${attackOdds}`)
+                break
+            case 'attack.':
+                attackOdds = words[words.length - 6]
+                console.log(`attack odds are ${attackOdds}`)
+                break
+            case 'prepared.':
+                currentPrep = words[3]
+                remainingPrep = words[words.length - 8]
+                console.log(`We have prepared ${currentPrep} day(s)`)
+                console.log(`${remainingPrep} day(s) of remaining prep`)
+                break
+            default:
+                break
+        }
+    }
+}
+
+var WallPrep = parseInt(wallsAdd);
+var CurPrep = parseInt(currentPrep);
+var RemPrep = parseInt(remainingPrep);
+var CurAttack = parseInt(attackOdds.split('%'));
+var CurSiege = parseInt(siegeOdds.split('%'));
+
 // Load in variables sent from user
-const WallPrep = 7;
-const CurPrep = 9;
-const RemPrep = 10;
-const CurAttack = 25;
-const CurSiege = 75;
+//const WallPrep = 7;
+//const CurPrep = 9;
+//const RemPrep = 10;
+//const CurAttack = 25;
+//const CurSiege = 75;
 
 // Total prep value based on user data
 const TotPrep = CurPrep + RemPrep;
 
 // Prep remaining both with and without walls
 var Prep = [];
+var PrepAdvance;
 
-if((RemPrep - WallPrep)<=0){
-    Prep = [RemPrep,0];
-} else{Prep = [RemPrep,(RemPrep - WallPrep)];}
+if ((RemPrep - WallPrep) <= 0) {
+    Prep = [RemPrep, 0];
+    PrepAdvance = RemPrep;
+} else {
+    Prep = [RemPrep, (RemPrep - WallPrep)];
+    PrepAdvance = WallPrep;
+}
 
 // Convert Attack (0) and Siege (1) percent chance to decimal chance 
 const startChance = [CurAttack / 100, CurSiege / 100];
@@ -22,7 +79,7 @@ const startChance = [CurAttack / 100, CurSiege / 100];
 var base, exp, expSign, x6, x5, x4, x3, x2, x1, x0, modChance, OPDPbase, OPDPexp;
 var startOPDP = [], modOPDP = [];
 
-var i=0;
+var i = 0;
 for (i = 0; i <= 1; i++) {
 
     // Initialize Chance -> OPDP conversion
@@ -56,6 +113,7 @@ var attackChance = [];
 var TotAttackChance = [];
 var OPDP, leadSign, AllPrep;
 
+// First iteration, full walls
 for (j = 0; j <= Prep[0]; j++) {
     // Iterate through Remaining Prep to find %Chance at each tick
     for (i = 0; i <= 1; i++) {
@@ -81,24 +139,29 @@ for (j = 0; j <= Prep[0]; j++) {
         leadSign = Math.pow(base, exp);
 
         // Add current chance value to array of values
-        attackChance[i] = Math.round(100*(leadSign + (expSign * (x6 + x5 + x4 + x3 + x2 + x1 + x0))));
+        attackChance[i] = Math.round(100 * (leadSign + (expSign * (x6 + x5 + x4 + x3 + x2 + x1 + x0))));
 
-        // Print array of chance values
     }
 
-    // Push each iteration into new row
-    TotAttackChance.push([attackChance[0],attackChance[1]]);
+    if (CurAttack == CurSiege) {
+        // Push each iteration into new row
+        TotAttackChance.push(attackChance[0]);
+    } else {
+        // Push each iteration into new row
+        TotAttackChance.push([attackChance[0], attackChance[1]]);
+    }
 }
 
 var noWallChance = [];
 var TotNoWallChance = [];
 
+// Second iteration, No Walls
 for (j = 0; j <= Prep[1]; j++) {
     // Iterate through Remaining Prep to find %Chance at each tick
     for (i = 0; i <= 1; i++) {
 
         // OPDP based on current tick iteration
-        OPDP = modOPDP[i] * (CurPrep + WallPrep + j);
+        OPDP = modOPDP[i] * (CurPrep + PrepAdvance + j);
 
         // Initialize 6th order polynomial ()
         expSign = (-Math.sign(Math.log10(OPDP / 1.0000000001)));
@@ -118,13 +181,18 @@ for (j = 0; j <= Prep[1]; j++) {
         leadSign = Math.pow(base, exp);
 
         // Add current chance value to array of values
-        noWallChance[i] = Math.round(100*(leadSign + (expSign * (x6 + x5 + x4 + x3 + x2 + x1 + x0))));
+        noWallChance[i] = Math.round(100 * (leadSign + (expSign * (x6 + x5 + x4 + x3 + x2 + x1 + x0))));
 
         // Print array of chance values
     }
 
-    // Push each iteration into new row
-    TotNoWallChance.push([noWallChance[0],noWallChance[1]]);
+    if (CurAttack == CurSiege) {
+        // Push each iteration into new row
+        TotNoWallChance.push(noWallChance[0]);
+    } else {
+        // Push each iteration into new row
+        TotNoWallChance.push([noWallChance[0], noWallChance[1]]);
+    }
 }
 
 //console.table(TotAttackChance);
@@ -132,37 +200,70 @@ for (j = 0; j <= Prep[1]; j++) {
 
 var TotChance = [];
 var AttackWalls = [];
-var SiegeWalls=[];
-var NoWallAttack=[];
-var NoWallSiege=[];
+var SiegeWalls = [];
+var NoWallAttack = [];
+var NoWallSiege = [];
 
-for (i = 0; i <= Prep[0]; i++) {
-    AttackWalls.push(TotAttackChance[i][0]);
-    SiegeWalls.push(TotAttackChance[i][1]);
+if (CurAttack == CurSiege) {
+
+    // Break each Full Wall array into individual components
+    for (i = 0; i <= Prep[0]; i++) {
+        AttackWalls.push(TotAttackChance[i]);
+    }
+
+    // Break each No Wall array into individual components
+    for (i = 0; i <= Prep[1]; i++) {
+        NoWallAttack.push(TotNoWallChance[i]);
+    }
+
+    // Add '-' symbols for each tick after the No Wall max is reached
+    for (j = i; j <= (Prep[0]); j++) {
+        NoWallAttack.push('-');
+    }
+
+    var combine = [];
+    var lastVal = 0;
+
+    // Combine all arrays into single table
+    for (i = 0; i <= Prep[0]; i++) {
+        combine.push([AttackWalls[i], NoWallAttack[i]]);
+    }
+
+} else {
+
+    // Break each Full Wall array into individual components
+    for (i = 0; i <= Prep[0]; i++) {
+        AttackWalls.push(TotAttackChance[i][0]);
+        SiegeWalls.push(TotAttackChance[i][1]);
+    }
+
+    // Break each No Wall array into individual components
+    for (i = 0; i <= Prep[1]; i++) {
+        NoWallAttack.push(TotNoWallChance[i][0]);
+        NoWallSiege.push(TotNoWallChance[i][1]);
+    }
+
+    // Add '-' symbols for each tick after the No Wall max is reached
+    for (j = i; j <= (Prep[0]); j++) {
+        NoWallAttack.push('-');
+        NoWallSiege.push('-');
+    }
+
+    var combine = [];
+    var lastVal = 0;
+
+    // Combine all arrays into single table
+    for (i = 0; i <= Prep[0]; i++) {
+        combine.push([AttackWalls[i], NoWallAttack[i], SiegeWalls[i], NoWallSiege[i]]);
+    }
+
 }
 
-for (i=0; i<=Prep[1]; i++){
-    NoWallAttack.push(TotNoWallChance[i][0]);
-    NoWallSiege.push(TotNoWallChance[i][1]);
-}
-
-for(j=i; j<=(Prep[0]); j++){
-    NoWallAttack.push('-');
-    NoWallSiege.push('-');
-}
-
-//console.table(AttackWalls,SiegeWalls);
+//console.table(AttackWalls);
 //console.table(SiegeWalls);
 //console.table(NoWallAttack);
 //console.table(NoWallSiege);
 
-var combine = [];
-var lastVal = 0;
-
-for (i=0; i<=Prep[0]; i++){
-    combine.push([AttackWalls[i],NoWallAttack[i],SiegeWalls[i],NoWallSiege[i]]);
-}
-
-
+// Print the table
 console.table(combine);
 
