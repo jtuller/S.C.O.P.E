@@ -20,6 +20,19 @@ module.exports = (client, message) => {
     ];
     command = "eits";
   }
+  if (
+    message.content.toLowerCase().startsWith("!atck") ||
+    message.content.toLowerCase().startsWith("+atck")
+  ) {
+    args = [
+      "atck",
+      message.content
+        .toLowerCase()
+        .substr(5, message.content.length - 5)
+        .trim(),
+    ];
+    command = "atck";
+  }
   // ALl others handled standard
   else {
     args = message.content
@@ -31,6 +44,6 @@ module.exports = (client, message) => {
   // Command Handling.
   let cmd = client.commands.get(command);
   if (!cmd) return;
-
+  console.log(`${command} called with args: ${args}`)
   cmd(client, message, args);
 };

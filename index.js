@@ -4,7 +4,7 @@ const client = new Discord.Client();
 let { readdirSync } = require("fs");
 
 // Config calls
-client.config = require("./config.js");
+client.config = require("./config.json");
 client.commands = new Discord.Collection();
 
 // Command Handler / Setup.
