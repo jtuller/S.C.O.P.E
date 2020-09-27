@@ -191,7 +191,6 @@ if (CurAttack == CurSiege) {
     }
 
     var combine = [];
-    var lastVal = 0;
 
     // Combine all arrays into single table
     for (i = 0; i <= Prep[0]; i++) {
@@ -227,15 +226,20 @@ if (CurAttack == CurSiege) {
     }
 return combine
 }}
+const { isNumeral } = require("numeral");
 const numeral = require("numeral");
 module.exports = (client, message, args) => {
-    const results = (battlecalc(args[1]))
-    console.log(results)
+    const ticks = (battlecalc(args[1]))
+    let display = `\`\`\`T | A+W | A-W | S+W | S-W\n-------------------------\n`
+    console.log(ticks)
+    for(t in ticks){
+        console.log(ticks[t])
+    }
     message.channel.send(`Calculating!`).then(msg => {
-        msg.edit(`
-            \`\`\`T | A+W | A-W | S+W | S-W\n-------------------------\n${results.map((tick, i) => `${i} | ${numeral(tick[0]).format('00')}% | ${numeral(tick[1]).format('00')}% | ${numeral(tick[2]).format('00')}% | ${numeral(tick[3]).format('00')}% \n`).join('')}\`\`\``);
+        msg.edit(`${display}${ticks.map((tick, i) => `${i} | ${numeral(tick[0]).format('00')}% | ${numeral(tick[1]).format('00')}% | ${numeral(tick[2]).format('00')}% | ${numeral(tick[3]).format('00')}% \n`).join('')}\`\`\``);
     });}
 
 
 
 
+    [ 22, 29, 23, 31 ], [ 26, '-', 27, '-' ], [ 29, '-', 31, '-' ]
