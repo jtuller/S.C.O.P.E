@@ -83,7 +83,7 @@ module.exports = (client, message, args) => {
         ).format("0,0")}\nOP: ${numeral(op).format("0,0.0")}\nDP: ${numeral(
           dp
         ).format("0,0.0")}
-            /n**credit**
+            \n **credit**
             made with :heart: by Grand Moff`,
     },
   });
