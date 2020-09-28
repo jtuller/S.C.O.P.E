@@ -27,6 +27,7 @@ module.exports = (client, message, args) => {
   let cost = 0;
   let military = 0;
   let magic = 0;
+  let units = [];
 
   if(args[0] > 0 && args [1] > 0){
     military = args[0];
@@ -35,9 +36,11 @@ module.exports = (client, message, args) => {
   
   let allWords = args.toString().split('\n').slice(1).toString().split(':').toString().split(',');
 
-  unitNames = [allWords[0],allWords[2],allWords[4],allWords[6],allWords[8],allWords[10]];
-  units = [allWords[1],allWords[3],allWords[5],allWords[7],allWords[9],allWords[11]];
-  
+  let count = 0;
+  for(i=0; i<(allWords.length/2); i++){
+    units[i] = allWords[(i*2)+1];
+  }
+
   // Identifies Race
   const raceName = raceIdentify(args);
   const race = races[raceName];
@@ -51,8 +54,8 @@ module.exports = (client, message, args) => {
   //calculates Raw Unit OP/DP & Cost
   for (i = 1; i < 8; i++) {
     let unitI = "u".concat(i);
-    let unitName = race[unitI].name;
     if (i < 7) {
+      // units are base 0, so subtract 1
       op = isNaN(units[i-1]) ? op : op + units[i-1] * race[unitI].op;
       dp = isNaN(units[i-1]) ? dp : dp + units[i-1] * race[unitI].dp;
       cost = isNaN(units[i-1]) ? cost : cost + units[i-1] * race[unitI].cost;
@@ -60,7 +63,7 @@ module.exports = (client, message, args) => {
   }
   op = military ? op * (1 + military / 10) : op;
   dp = military ? dp * (1 + military / 10) : dp;
-  dp = units[7] > 0 ? dp + units[7] * (5 + military) : dp;
+  dp = units[6] > 0 ? dp + units[6] * (5 + military) : dp;  // likewise, 6 would be GTs now, not 7
 
   //Output results
   message.channel.send({
