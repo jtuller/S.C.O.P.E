@@ -87,7 +87,7 @@ module.exports = (client, message, args) => {
           dp
         ).format("0,0.0")}
             \n **credit**
-            made with :heart: by Grand Moff`,
+            made with :heart: by Percy & Moff`,
     },
   });
 

@@ -1,25 +1,35 @@
+const numeral = require("numeral");
 function battlecalc(string) {
     let tempString = string.split(`\n`);
-    let attackOdds, siegeOdds, wallsAdd, currentPrep, remainingPrep;
     for (s in tempString) {
         let words = tempString[s].split(` `);
         if (words.length > 1) {
-            switch (words[words.length - 1]) {
-                case 'day(s).':
+            switch ((words[words.length - 1]).slice(-3)){
+                case 's).':
                     wallsAdd = words[words.length - 2];
+                    wallsCount= words[words.length - 11]
                     break
-                case 'assault.':
+                case 'lt.':
                     siegeOdds = words[words.length - 6]
                     attackOdds = words[words.length - 13]
                     break
-                case 'attack.':
+                case 'ck.':
                     attackOdds = words[words.length - 7]
                     siegeOdds = words[words.length - 7]
                     break
-                case 'prepared.':
+                case 'ed.':
                     currentPrep = words[3]
                     remainingPrep = words[words.length - 8]
                     break
+                case 'ns.':
+                    currentSoldiers=words[words.length - 26]
+                    currentTowers=words[words.length - 3]
+                    currentPez=words[words.length - 7]
+                    TargetName=words[0].charAt(0).toUpperCase() + words[0].slice(1)
+                    break;
+                case '...': 
+                    ArmyName=words[0].charAt(0).toUpperCase() + words[0].slice(1)
+                    ownTroops= words[words.indexOf('soldiers')-1]
                 default:
                     break
             }
@@ -31,7 +41,7 @@ function battlecalc(string) {
     let RemPrep = parseInt(remainingPrep);
     let CurAttack = parseInt(attackOdds.split('%'));
     let CurSiege = parseInt(siegeOdds.split('%'));
-
+    console.log(WallPrep,CurPrep,RemPrep,CurAttack,CurSiege)
     // Total prep value based on user data
     const TotPrep = CurPrep + RemPrep;
 
@@ -183,7 +193,6 @@ function battlecalc(string) {
     }
 
     var combine = []
-    var lastVal = 0;
 
     // Combine all arrays into single table
     for (i = 0; i <= Prep[0]; i++) {
@@ -194,8 +203,7 @@ function battlecalc(string) {
 
 
 
-const { isNumeral } = require("numeral");
-const numeral = require("numeral");
+
 module.exports = (client, message, args) => {
     const allVals = (battlecalc(args[1]));
 
@@ -205,12 +213,9 @@ module.exports = (client, message, args) => {
     attackNW = allVals[3];
     siegeNW = allVals[4];
     prep = allVals[5];
-
-
-//console.log(`${numeral(attack[0]).format('00')}`);
 let val;
 let chances = [];
-chances.push(`\`\`\`T  | A+W | A-W | S+W | S-W\n-------------------------`);
+chances.push(`\`\`\`-------------------------\nT  | A+W | A-W | S+W | S-W\n-------------------------`);
 for(i=0; i< attack.length; i++){
     aVal = attack[i];
     sVal = siege[i];
@@ -237,6 +242,23 @@ for(i=0; i< attack.length; i++){
 
 }
 chances.push(`\`\`\``)
-console.log(chances);
+message.channel.send({
+    embed: {
+      color: 2123412,
+      description: ` Attack Table Requested by: ${message.author}
+      **Attacking Army: *${ArmyName}***
+      Prepared: *currentPrepWontRenderForSomeFuckingReason*
+      Troops: *${numeral(ownTroops).format("0,0")}*
+      
+      **Target: *${TargetName}***
+      Walls: *${numeral(wallsCount).format("0,0")}*
+      Towers: *${numeral(currentTowers).format("0,0")}*
+      Troops: *${numeral(currentSoldiers).format("0,0")}*
+      Pez: *${numeral(currentPez).format("0,0")}*
+      
+      Remaining ticks:`,
+    },
+  });
 message.channel.send(chances);
+message.delete({ timeout: 3000 });
 }
