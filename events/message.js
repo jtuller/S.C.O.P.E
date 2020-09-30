@@ -44,6 +44,6 @@ module.exports = (client, message) => {
   // Command Handling.
   let cmd = client.commands.get(command);
   if (!cmd) return;
-  console.log(`${command} called with args: ${args}`)
+  console.log(`${command} called by ${message.author} with arguments:${args}`)
   cmd(client, message, args);
 };
