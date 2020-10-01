@@ -10,8 +10,8 @@ function battlecalc(string) {
                     wallsCount= words[words.length - 11]
                     break
                 case 'lt.':
-                    siegeOdds = words[words.length - 6]
-                    attackOdds = words[words.length - 13]
+                    siegeOdds = words[words.length - 7]
+                    attackOdds = words[words.length - 17]
                     break
                 case 'ck.':
                     attackOdds = words[words.length - 7]
@@ -198,7 +198,7 @@ function battlecalc(string) {
     for (i = 0; i <= Prep[0]; i++) {
         combine.push([AttackWalls[i], NoWallAttack[i], SiegeWalls[i], NoWallSiege[i]]);
     }
-    return [combine, AttackWalls, SiegeWalls, NoWallAttack, NoWallSiege, Prep]
+    return [combine, AttackWalls, SiegeWalls, NoWallAttack, NoWallSiege, Prep, CurPrep, WallPrep]
 }
 
 
@@ -212,7 +212,10 @@ module.exports = (client, message, args) => {
     siege = allVals[2];
     attackNW = allVals[3];
     siegeNW = allVals[4];
-    prep = allVals[5];
+    prepRem = allVals[5];
+    prep = allVals[6];
+    wallPrep = allVals[7];
+
 let val;
 let chances = [];
 chances.push(`\`\`\`-------------------------\nT  | A+W | A-W | S+W | S-W\n-------------------------`);
@@ -247,16 +250,18 @@ message.channel.send({
       color: 2123412,
       description: ` Attack Table Requested by: ${message.author}
       **Attacking Army: *${ArmyName}***
-      Prepared: *currentPrepWontRenderForSomeFuckingReason*
+      Prepared: *${numeral(prep).format("0")}*
+      Remaining: *${numeral(prepRem[0]).format("0")}*
+      Wall Prep: *${numeral(wallPrep).format("0")}*
       Troops: *${numeral(ownTroops).format("0,0")}*
       
       **Target: *${TargetName}***
       Walls: *${numeral(wallsCount).format("0,0")}*
-      Towers: *${numeral(currentTowers).format("0,0")}*
+      GTs: *${numeral(currentTowers).format("0,0")}*
       Troops: *${numeral(currentSoldiers).format("0,0")}*
       Pez: *${numeral(currentPez).format("0,0")}*
       
-      Remaining ticks:`,
+      Chances over the remaining ticks:`,
     },
   });
 message.channel.send(chances);
