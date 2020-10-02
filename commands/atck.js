@@ -10,8 +10,8 @@ function battlecalc(string) {
                     wallsCount= words[words.length - 11]
                     break
                 case 'lt.':
-                    siegeOdds = words[words.length - 7]
-                    attackOdds = words[words.length - 17]
+                    siegeOdds = words[words.length - 6]
+                    attackOdds = words[words.length - 13]
                     break
                 case 'ck.':
                     attackOdds = words[words.length - 7]
