@@ -12,11 +12,11 @@ module.exports = (client, message, args) => {
       description: `A list of my commands:
 
             **!eits** **|** calculates OP, DP, troop cost
-            Format **|** !eits military magic *"paste"*
+            Format **|** !eits military(opt) magic(opt) *"paste"*
             __EX: !eits 7 4 *"paste"*__
 
             **!atck** **|** attack chances over prep
-            Format **|** !atck military magic *"paste"*
+            Format **|** !atck military(opt) magic(opt) *"paste"*
             __EX: !atck 7 4 *"paste"*__
 
             **!range** **|** MT range estimation
@@ -25,6 +25,10 @@ module.exports = (client, message, args) => {
             **Note:**
             over 200: MT input, tick output
             under 200: tick input, MT output
+
+            **!archive** **|** move to archive, add era tag
+            Format **|** !archive era(opt)
+            __EX: !archive 72__
             `
     },
   });
