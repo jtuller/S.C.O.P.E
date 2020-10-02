@@ -2,21 +2,28 @@ const numeral = require("numeral");
 const races = require("../resources/units");
 
 function raceIdentify(i) {
-  let words = i.slice(i.length - 1).toString().split('\n').slice(1).toString().split(':').toString().split(',').toString();
-  if (words.search("Knights:") > 0) {
+  let words = i.toString();
+  if (words.search("Catapults") > 0) {
     return "human";
-  } else if (words.search("Ghosts") > 0) {
+  } else if (words.search("Archmages") > 0) {
     return "elf";
-  } else if (words.search("Ogres") > 0) {
+  } else if (words.search("Nazgul") > 0) {
     return "orc";
-  } else if (words.search("Axemen") > 0) {
+  } else if (words.search("Cavemasters") > 0) {
     return "dwarf";
-  } else if (words.search("Warlords") > 0) {
+  } else if (words.search("Berserkers") > 0) {
     return "troll";
-  } else if (words.search("Farmers") > 0) {
+  } else if (words.search("Adventurers") > 0) {
     return "halfling";
   } else {
     return "Error";
+  }
+}
+
+function NameIdentify(i){
+  let Owner, Target;
+  if (i.search() > 0) {
+    return "human";
   }
 }
 
@@ -28,25 +35,78 @@ module.exports = (client, message, args) => {
   let military = 0;
   let magic = 0;
   let units = [];
+  let rawUnits = 0;
+  let rawUnknown = 0;
+  let rawGTs = 0;
+  let GTs = 0;
+  let extraArmies = 0;
+  let extraTroops = 0;
+  let Type,interm,Owner,Target,tempEndOwner,startTarget,endTarget,startOwner,endOwner,tempOwner;
 
   if(args[0] > 0 && args [1] > 0){
     military = args[0];
     magic = args[1];
   }
-  
-  let allWords = args.toString().split('\n').slice(1).toString().split(':').toString().split(',');
 
-  let count = 0;
-  for(i=0; i<(allWords.length/2); i++){
-    units[i] = allWords[(i*2)+1];
+  // Army EITS reports
+  if(args.length < 10){
+
+    Type = 'Army';
+    rawUnits = args.toString().split('\n').slice(1).toString().split(':').toString().split(',');
+  
+    tempArray = args.toString().split(`,`);
+
+    interm = tempArray.indexOf('from');
+    tempEndOwner = tempArray[tempArray.length-1].split(`\n`)[0].replace(':','');
+
+    Target = tempArray.slice(0,interm).join(' ');
+    tempOwner = tempArray.slice(interm+1,tempArray.length-1);
+    tempOwner.push(tempEndOwner);
+  
+    Owner = tempOwner.join(' ');
+  }
+  // City EITS reports
+  else{
+
+    Type = 'City';
+    rawUnits = args.toString().split(`\n`).slice(1,7).toString().split(`,`).toString().split(`:`).toString().split(`,`);
+    rawGTs = args.toString().split(`\n`).slice(12,13).toString().split(`,`).slice(1,2).toString().split(`:`);
+    rawUnknown = args.toString().split(`\n`).slice(19,20).toString().split(`,`);
+    GTs = rawGTs[1];
+    extraArmies = parseInt(rawUnknown[4]);
+    extraTroops = parseInt(rawUnknown[6]);
+
+    rawUnits.push("GTs",GTs);
+
+    tempArray = args.toString().split(`,`);
+
+    startTarget = tempArray.indexOf('about');
+    endTarget = tempArray.indexOf('');
+    startOwner = tempArray.indexOf('by');
+    // last part of Owner name
+    tempEndOwner = tempArray[tempArray.length - 11].split(`\n`)[0].replace(':','');
+    endOwner = tempArray.length-11;
+  
+    Target = tempArray.slice(startTarget+1,endTarget).join(' ');
+    tempOwner = tempArray.slice(startOwner+1,endOwner);
+    tempOwner.push(tempEndOwner);
+  
+    Owner = tempOwner.join(' ');
+  }
+  
+  console.log(Target);
+  console.log(Owner);
+
+  for(i=0; i<(rawUnits.length/2); i++){
+    units[i] = rawUnits[(i*2)+1];
   }
 
   // Identifies Race
-  const raceName = raceIdentify(args);
+  const raceName = raceIdentify(rawUnits);
   const race = races[raceName];
 
   // Handles elf mess
-  if (race.u5.name === "Archmages") {
+  if (raceName === "elf") {
     let mag = magic > 9 ? 9 : magic;
     race.u5.op = mag * 3;
     race.u5.dp = mag * 3;
@@ -70,6 +130,11 @@ module.exports = (client, message, args) => {
     embed: {
       color: 2123412,
       description: ` EITS Requested by: ${message.author}\n
+            **Target ${Type}:**
+            ${Target}
+            **Owner:**
+            ${Owner}
+
             **Units**
             ${race.u1.name}: ${numeral(units[0]).format("0,0")}\n${race.u2.name
         }: ${numeral(units[1]).format("0,0")}\n${race.u3.name}: ${numeral(
@@ -81,7 +146,7 @@ module.exports = (client, message, args) => {
           units[6]
         ).format("0,0")}
             \n**Power**
-            Military: ${military} \nMagic: ${magic} \nCost: ${numeral(
+            Military Sci: ${military} \nMagic Sci: ${magic} \nCost: ${numeral(
           cost
         ).format("0,0")}\nOP: ${numeral(op).format("0,0.0")}\nDP: ${numeral(
           dp
@@ -90,5 +155,5 @@ module.exports = (client, message, args) => {
             made with :heart: by Percy & Moff`,
     },
   });
-
+  message.delete({ timeout: 1000 });
 }
