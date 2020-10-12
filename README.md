@@ -20,3 +20,6 @@ to calculate the Offensive and Defensive power of an army based on a simple inpu
 ```EITS PASTE DUMP```
 ````
 to calculate the Offensive and Defensive power of an army based on pasting the results from an Eye in The Sky spell 
+
+````!atck MIL MAG   BATTLE REPORT PASTE DUMP ````
+Displays chances over all ticks left in prep if starting chances are 1% or greater
