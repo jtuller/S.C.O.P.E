@@ -1,6 +1,6 @@
 const numeral = require("numeral");
 function battlecalc(string) {
-    let attackOdds = 0, scienceTag = 0, SiegeYN = 'No', Bless = 'No', siegeOdds = 0, wallsAdd = 0, wallsCount = 0, currentPrep = 0, remainingPrep = 0, currentSoldiers = 0, currentTowers = 0, currentPez = 0, TargetName = 0, tempArmyName = 0; ArmyName = 0, ownTroops = 0;
+    let attackOdds = 0, scienceTag = 0, SiegeYN = 'No', Bless = 'No', siegeOdds = 0, wallsAdd = 0, wallsCount = 0, currentPrep = 0, remainingPrep = 0, currentSoldiers = 0, currentTowers = 0, currentPez = 0, TargetName = 'TargetName', tempArmyName = 'NoArmy'; ArmyName = 'YourArmy', ownTroops = 'NoneListed';
     let tempString = string.split(`\n`);
     for (s in tempString) {
         let words = tempString[s].split(` `);
@@ -31,7 +31,7 @@ function battlecalc(string) {
                     remainingPrep = words[words.length - 8]
                     break
                 case 'ns.':
-                    scienceTag = words.slice(words.indexOf('armor') - 9, words.indexOf('armor') - 4).join(' ');
+                    scienceTag = words.slice(words.indexOf('armor.') - 9, words.indexOf('armor') - 4).join(' ');
                     currentSoldiers = words.slice(words.indexOf('soldiers') - 1, words.indexOf('soldiers'))
                     currentTowers = words[words.length - 3]
                     currentPez = words.slice(words.indexOf('peasants.') - 1, words.indexOf('peasants.'))
@@ -41,7 +41,7 @@ function battlecalc(string) {
                 case '...':
                     tempArmyName = words.slice(0, words.indexOf('with')).join(' ');
                     ArmyName = tempArmyName.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-                    ownTroops = words[words.indexOf('soldiers') - 1]
+                    ownTroops = numeral(words[words.indexOf('soldiers') - 1]).format("0,0")
                 default:
                     break
             }
@@ -55,9 +55,6 @@ function battlecalc(string) {
     RemPrep = parseInt(remainingPrep);
     CurAttack = parseInt(attackOdds.split('%'));
     CurSiege = parseInt(siegeOdds.split('%'));
-
-    console.log(currentSoldiers);
-    console.log(currentPez);
 
     tempTag = scienceTag.split(' ');
     milLevel = 0;
@@ -346,7 +343,7 @@ module.exports = (client, message, args) => {
       Prepared: *${numeral(prep).format("0")}*
       Remaining: *${numeral(prepRem[0]).format("0")}*
       Wall Prep: *${numeral(wallPrep).format("0")}*
-      Troops: *${numeral(ownTroops).format("0,0")}*
+      Troops: *${ownTroops}*
       
       **Target: *${TargetName}***
       Military: *${milLevel}*

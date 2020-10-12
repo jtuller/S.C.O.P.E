@@ -20,13 +20,6 @@ function raceIdentify(i) {
   }
 }
 
-function NameIdentify(i) {
-  let Owner, Target;
-  if (i.search() > 0) {
-    return "human";
-  }
-}
-
 module.exports = (client, message, args) => {
 
   let op = 0;
@@ -41,7 +34,7 @@ module.exports = (client, message, args) => {
   let GTs = 0;
   let extraArmies = 0;
   let extraTroops = 0;
-  let tempArray,Type, interm, Owner, Target, tempEndOwner, startTarget, endTarget, startOwner, endOwner, tempOwner;
+  let tempArray = 'N/A',Type = 'N/A', interm = 'N/A', Owner = 'N/A', Target='N/A', tempEndOwner='N/A', startTarget='N/A', endTarget='N/A', startOwner='N/A', endOwner='N/A', tempOwner = 'N/A';
 
   if (args[0] >= 0 && args[1] >= 0) {
     military = args[0];
@@ -49,20 +42,20 @@ module.exports = (client, message, args) => {
     tempArray = args.slice(2,args.length).toString().split(`,`);
   }else{tempArray = args.toString().split(`,`);}
 
-  // Army EITS reports
-  if (args.length < 10) {
+  console.log(args);
+  console.log(args.length);
+
+  // Army EITS reports (short)
+  if (args.length < 20) {
 
     Type = 'Army';
     rawUnits = args.toString().split('\n').slice(1).toString().split(':').toString().split(',');
+    rawNames = args.toString().split('\n').slice(0,1).toString().split(',');
 
-    interm = tempArray.indexOf('from');
-    tempEndOwner = tempArray[tempArray.length - 1].split(`\n`)[0].replace(':', '');
+    interm = rawNames.indexOf('from');
+    Owner = rawNames.slice(interm+1).toString().split(',').join(' ');
 
-    Target = tempArray.slice(0, interm).join(' ');
-    tempOwner = tempArray.slice(interm + 1, tempArray.length - 1);
-    tempOwner.push(tempEndOwner);
-
-    Owner = tempOwner.join(' ');
+    Target = rawNames.slice(0, interm).toString().split(',').join(' ');
   }
   // City EITS reports
   else {
@@ -90,9 +83,6 @@ module.exports = (client, message, args) => {
 
     Owner = tempOwner.join(' ');
   }
-
-  console.log(Target);
-  console.log(Owner);
 
   for (i = 0; i < (rawUnits.length / 2); i++) {
     units[i] = rawUnits[(i * 2) + 1];
