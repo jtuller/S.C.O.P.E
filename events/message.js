@@ -33,6 +33,19 @@ module.exports = (client, message) => {
     ];
     command = "atck";
   }
+  if (
+    message.content.toLowerCase().startsWith("!bugs") ||
+    message.content.toLowerCase().startsWith("+bugs")
+  ) {
+    args = [
+      "bugs",
+      message.content
+        .toLowerCase()
+        .substr(5, message.content.length - 5)
+        .trim(),
+    ];
+    command = "bugs";
+  }
   // ALl others handled standard
   else {
     args = message.content
