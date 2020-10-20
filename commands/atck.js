@@ -38,6 +38,13 @@ function battlecalc(string) {
                     tempTargetName = words.slice(0, words.indexOf('seem') - 6).join(' ');
                     TargetName = tempTargetName.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
                     break;
+                case 'ts.':
+                    scienceTag = words.slice(words.indexOf('armor.') - 9, words.indexOf('armor') - 4).join(' ');
+                    currentSoldiers = words.slice(words.indexOf('soldiers') - 1, words.indexOf('soldiers'))
+                    currentPez = words.slice(words.indexOf('peasants.') - 1, words.indexOf('peasants.'))
+                    tempTargetName = words.slice(0, words.indexOf('seem') - 6).join(' ');
+                    TargetName = tempTargetName.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+                    break;
                 case '...':
                     tempArmyName = words.slice(0, words.indexOf('with')).join(' ');
                     ArmyName = tempArmyName.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
@@ -55,7 +62,7 @@ function battlecalc(string) {
     RemPrep = parseInt(remainingPrep);
     CurAttack = parseInt(attackOdds.split('%'));
     CurSiege = parseInt(siegeOdds.split('%'));
-
+    console.log(scienceTag)
     tempTag = scienceTag.split(' ');
     milLevel = 0;
     if (tempTag.includes('mithril') > 0) {
