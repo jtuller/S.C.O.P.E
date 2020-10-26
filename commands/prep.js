@@ -5,9 +5,9 @@ function prep(troops,citySize){
 }
 
 module.exports = (client, message, args) => {
-    console.log(Number.isInteger(args[0]))
-    console.log(Number.isInteger(args[1]))
-    if (!Number.isInteger(args[1]) && !Number.isInteger(args[1])){
+    console.log(Number.isInteger(parseInt(args[0])))
+    console.log(Number.isInteger(parseInt(args[1])))
+    if (Number.isInteger(parseInt(args[1])) && Number.isInteger(parseInt(args[1]))){
     results = prep(args[0], args[1])
     message.channel.send(`${args[0]} troops attacking city size ${args[1]}:\`\`\`00% Walls | ${Math.ceil(results)} ticks\n25% Walls | ${Math.ceil(results*1.25)} ticks\n50% Walls | ${Math.ceil(results*1.5)} ticks\n75% Walls | ${Math.ceil(results*1.75)} ticks\nMax Walls | ${Math.ceil(results*2)} ticks\`\`\``)
     } else {
