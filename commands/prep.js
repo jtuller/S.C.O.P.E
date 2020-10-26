@@ -5,14 +5,19 @@ function prep(troops,citySize){
 }
 
 module.exports = (client, message, args) => {
-    if (args[0] == '-h' || !Number.isInteger(args[0]) || !Number.isInteger(args[1])){
+    console.log(Number.isInteger(args[0]))
+    console.log(Number.isInteger(args[1]))
+    if (!Number.isInteger(args[1]) && !Number.isInteger(args[1])){
+    results = prep(args[0], args[1])
+    message.channel.send(`${args[0]} troops attacking city size ${args[1]}:\`\`\`00% Walls | ${Math.ceil(results)} ticks\n25% Walls | ${Math.ceil(results*1.25)} ticks\n50% Walls | ${Math.ceil(results*1.5)} ticks\n75% Walls | ${Math.ceil(results*1.75)} ticks\nMax Walls | ${Math.ceil(results*2)} ticks\`\`\``)
+    } else {
         message.channel.send({
             embed: {
                 color: 2123412,
                 description: `!prep is used to estimate the expected length of prep on a target.
                 
                 It takes two arguements. Number of troops in the attacking army and the city "size". 
-
+    
                 > E.g. Attacking a 25600 city with 13245 troops(including magic units)
                 > !prep 13245 4
                 
@@ -30,7 +35,4 @@ module.exports = (client, message, args) => {
             },
         })
     }
-    else {
-        results = prep(args[0], args[1])
-        message.channel.send(`${args[0]} troops attacking city size ${args[1]}:\`\`\`00% Walls | ${Math.ceil(results)} ticks\n25% Walls | ${Math.ceil(results*1.25)} ticks\n50% Walls | ${Math.ceil(results*1.5)} ticks\n75% Walls | ${Math.ceil(results*1.75)} ticks\nMax Walls | ${Math.ceil(results*2)} ticks\`\`\``)}
-    }
+}
