@@ -1,68 +1,64 @@
 const numeral = require("numeral");
 function battlecalc(string) {
-    let attackOdds = 0, scienceTag = 0, SiegeYN = 'No', Bless = 'No', siegeOdds = 0, wallsAdd = 0, wallsCount = 0, currentPrep = 0, remainingPrep = 0, currentSoldiers = 0, currentTowers = 0, currentPez = 0, TargetName = 'TargetName', tempArmyName = 'NoArmy'; ArmyName = 'YourArmy', ownTroops = 'NoneListed';
-    let tempString = string.split(`\n`);
-    for (s in tempString) {
-        let words = tempString[s].split(` `);
-        if (words.length > 1) {
-            switch ((words[words.length - 1]).slice(-3)) {
-                case 's).':
-                    wallsAdd = words[words.length - 2];
-                    wallsCount = words[words.length - 11]
-                    break
-                case 'lt.':
-                    siegeOdds = words[words.length - 6]
-                    attackOdds = words[words.length - 13]
-                    break
-                case 'ck.':
-                    attackOdds = words[words.length - 7]
-                    siegeOdds = words[words.length - 7]
-                    break
-                case 'ge.':
-                    attackOdds = words[words.length - 12]
-                    siegeOdds = '100%';
-                    SiegeYN = 'Yes';
-                    break
-                case 'ed!':
-                    Bless = 'Yes';
-                    break
-                case 'ed.':
-                    currentPrep = words[3]
-                    remainingPrep = words[words.length - 8]
-                    break
-                case 'ns.':
-                    scienceTag = words.slice(words.indexOf('armor.') - 9, words.indexOf('armor') - 4).join(' ');
-                    currentSoldiers = words.slice(words.indexOf('soldiers') - 1, words.indexOf('soldiers'))
-                    currentTowers = words[words.length - 3]
-                    currentPez = words.slice(words.indexOf('peasants.') - 1, words.indexOf('peasants.'))
-                    tempTargetName = words.slice(0, words.indexOf('seem') - 6).join(' ');
-                    TargetName = tempTargetName.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-                    break;
-                case 'ts.':
-                    scienceTag = words.slice(words.indexOf('armor.') - 9, words.indexOf('armor') - 4).join(' ');
-                    currentSoldiers = words.slice(words.indexOf('soldiers') - 1, words.indexOf('soldiers'))
-                    currentPez = words.slice(words.indexOf('peasants.') - 1, words.indexOf('peasants.'))
-                    tempTargetName = words.slice(0, words.indexOf('seem') - 6).join(' ');
-                    TargetName = tempTargetName.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-                    break;
-                case '...':
-                    tempArmyName = words.slice(0, words.indexOf('with')).join(' ');
-                    ArmyName = tempArmyName.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
-                    ownTroops = numeral(words[words.indexOf('soldiers') - 1]).format("0,0")
-                default:
-                    break
-            }
-        }
+    let armyNameStop = 0, wallLoc1 = 0, wallLoc2 = 0, cutOne = 0, defOne = 0, armor = 0, defTwo = 0, guard = 0, cutTwo = 0,attackOdds = 0, scienceTag = 0, SiegeYN = 'No', Bless = 'No', siegeOdds = 0, wallsAdd = 0, wallsCount = 0, currentPrep = 0, remainingPrep = 0, currentSoldiers = 0, currentTowers = 0, currentPez = 0, TargetName = 'TargetName', ArmyName = 'YourArmy', ownTroops = 'NoneListed';
+    let tempString = string.toString().replace(/\r?\n|\r/g, ',').replace(',,', ',').split(',').toString().replace(/,,/g, ',').split(',').toString().split('...').toString().split(',')
+
+    armyNameStop = tempString.indexOf('with');
+    ArmyName = tempString.slice(0, armyNameStop).join(' ');
+
+    ownTroops = tempString.slice(armyNameStop + 1, armyNameStop + 2)
+
+    cutOne = tempString.indexOf('')
+    defOne = nthIndex(tempString, 'defended', 1)
+    armor = tempString.indexOf('armor.')
+    defTwo = nthIndex(tempString, 'defended', 2)
+    guard = tempString.indexOf('guard')
+    goodStuff = tempString.indexOf('currently')
+    cutTwo = nthIndex(tempString, 'prepared', 1)
+
+
+    TargetName = tempString.slice(cutOne, defOne - 1).join(' ');
+    currentSoldiers = tempString.slice(defOne + 2, defOne + 3)
+    currentPez = tempString.slice(defTwo + 2, defTwo + 3)
+    currentTowers = tempString.slice(guard - 1, guard)
+
+    if (tempString.includes('blessed!')) {
+        Bless = 'Yes'
     }
 
-    let tempTag = 0, milLevel = 0, WallPrep = 0, CurPrep = 0, RemPrep = 0, CurAttack = 0, CurSiege = 0;
+    if (tempString.includes('any')) {
+        attackOdds = tempString.slice(goodStuff + 3, goodStuff + 4)
+        siegeOdds = attackOdds
+    } else {
+        attackOdds = tempString.slice(goodStuff + 3, goodStuff + 4)
+        siegeOdds = tempString.slice(goodStuff + 10, goodStuff + 11)
+    }
 
-    WallPrep = parseInt(wallsAdd);
-    CurPrep = parseInt(currentPrep);
-    RemPrep = parseInt(remainingPrep);
-    CurAttack = parseInt(attackOdds.split('%'));
-    CurSiege = parseInt(siegeOdds.split('%'));
-    console.log(scienceTag)
+    if (tempString.includes('preparation')) {
+        wallLoc1 = tempString.indexOf('preparation')
+        wallsAdd = tempString.slice(wallLoc1 + 3, wallLoc1 + 4)
+    }
+    if (tempString.includes('walls')) {
+        wallLoc2 = tempString.indexOf('walls')
+        wallsCount = tempString.slice(wallLoc2 - 1, wallLoc2)
+    }
+
+    if (tempString.includes('siege.')) {
+        SiegeYN = 'Yes'
+        siegeOdds = '100%'
+    }
+
+    currentPrep = tempString.slice(cutTwo + 1, cutTwo + 2)
+    remainingPrep = tempString.slice(cutTwo + 10, cutTwo + 11)
+
+    let tempTag = 0, milLevel = 0, WallPrep = 0, CurPrep = 0, RemPrep = 0, CurAttack = 0, CurSiege = 0;
+    WallPrep = parseInt(wallsAdd.toString());
+    CurPrep = parseInt(currentPrep.toString());
+    RemPrep = parseInt(remainingPrep.toString());
+    CurAttack = parseInt(attackOdds.toString().split('%'));
+    CurSiege = parseInt(siegeOdds.toString().split('%'));  
+
+    scienceTag = tempString.slice(armor - 5, armor).join(' ');
     tempTag = scienceTag.split(' ');
     milLevel = 0;
     if (tempTag.includes('mithril') > 0) {
@@ -242,7 +238,7 @@ function battlecalc(string) {
         }
     }
 
-    if (CurSiege == 0 || SiegeYN == 'Yes' ) {
+    if (CurSiege == 0 || SiegeYN == 'Yes') {
         // Break each Full Wall array into individual components
         for (i = 0; i <= Prep[0]; i++) {
             SiegeWalls.push(' - ');
@@ -288,7 +284,8 @@ function battlecalc(string) {
 
 
 module.exports = (client, message, args) => {
-    const allVals = (battlecalc(args[1]));
+
+    const allVals = (battlecalc(args));
     let ticks = 0, attack = 0, siege = 0, attackNW = 0, siegeNW = 0, prepRem = 0, prep = 0, wallPrep = 0;
 
     ticks = allVals[0];
@@ -346,24 +343,33 @@ module.exports = (client, message, args) => {
         embed: {
             color: 2123412,
             description: ` Attack Table Requested by: ${message.author}
-      **Attacking Army: *${ArmyName}***
-      Prepared: *${numeral(prep).format("0")}*
-      Remaining: *${numeral(prepRem[0]).format("0")}*
-      Wall Prep: *${numeral(wallPrep).format("0")}*
-      Troops: *${ownTroops}*
-      
-      **Target: *${TargetName}***
-      Military: *${milLevel}*
-      Bless: *${bless}*
-      Sieged: *${SiegeYN}*
-      Walls: *${numeral(wallsCount).format("0,0")}*
-      GTs: *${numeral(currentTowers).format("0,0")}*
-      Troops: *${numeral(currentSoldiers).format("0,0")}*
-      Pez: *${numeral(currentPez).format("0,0")}*
-      
-      Chances over the remaining ticks:`,
+**Attacking Army: *${ArmyName}***
+Prepared: *${numeral(prep).format("0")}*
+Remaining: *${numeral(prepRem[0]).format("0")}*
+Wall Prep: *${numeral(wallPrep).format("0")}*
+Troops: *${ownTroops}*
+
+**Target: *${TargetName}***
+Military: *${milLevel}*
+Bless: *${bless}*
+Sieged: *${SiegeYN}*
+Walls: *${numeral(wallsCount).format("0,0")}*
+GTs: *${numeral(currentTowers).format("0,0")}*
+Troops: *${numeral(currentSoldiers).format("0,0")}*
+Pez: *${numeral(currentPez).format("0,0")}*
+
+Chances over the remaining ticks:`,
         },
     });
     message.channel.send(chances);
     message.delete({ timeout: 3000 });
+}
+
+function nthIndex(str, pat, n) {
+    var L = str.length, i = -1;
+    while (n-- && i++ < L) {
+        i = str.indexOf(pat, i);
+        if (i < 0) break;
+    }
+    return i;
 }
