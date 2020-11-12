@@ -20,19 +20,6 @@ module.exports = (client, message) => {
     ];
     command = "eits";
   }
-  if (
-    message.content.toLowerCase().startsWith("!atck") ||
-    message.content.toLowerCase().startsWith("+atck")
-  ) {
-    args = [
-      "atck",
-      message.content
-        .toLowerCase()
-        .substr(5, message.content.length - 5)
-        .trim(),
-    ];
-    command = "atck";
-  }
   // ALl others handled standard
   else {
     args = message.content
