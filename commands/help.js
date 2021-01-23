@@ -11,25 +11,56 @@ module.exports = (client, message, args) => {
       color: 3447003,
       description: `A list of my commands:
 
-            **!eits** **|** calculates OP, DP, troop cost
-            Format **|** !eits military(opt) magic(opt) *"paste"*
-            __EX: !eits 7 4 *"paste"*__
+        - - - - - - - - - - - - - - - - - - - - - - - - - -
+        **!eits**
+        Calcs:
+        OP, DP, troop cost
 
-            **!atck** **|** attack chances over prep
-            Format **|** !atck military(opt) magic(opt) *"paste"*
-            __EX: !atck 7 4 *"paste"*__
+        Format:
+        !eits military(opt) magic(opt) *"paste"*
 
-            **!range** **|** MT range estimation
-            Format  **|** !range race number
-            __EX: !range elf 2500__
-            **Note:**
-            over 200: MT input, tick output
-            under 200: tick input, MT output
+        __EX: !eits 7 4 *"paste"*__
+        - - - - - - - - - - - - - - - - - - - - - - - - - -
+        **!atck**
+        Calcs:
+        Attack chances over prep duration
 
-            **!archive** **|** move to archive, add era tag
-            Format **|** !archive era(opt)
-            __EX: !archive 72__
-            `
+        Format:
+        !atck military(opt) magic(opt) *"paste"*
+
+        __EX: !atck 7 4 *"paste"*__
+        - - - - - - - - - - - - - - - - - - - - - - - - - -
+        **!range**
+        Calcs: MT range estimation
+
+        Format: !range race number
+
+        __EX: !range elf 2500__
+
+        **Note:**
+        over 200: MT input, tick output
+        under 200: tick input, MT output
+        - - - - - - - - - - - - - - - - - - - - - - - - - -
+        **!army**
+        Calcs:
+        OP/DP ratio and enemy mod DP
+
+        Format:
+        !army youModOP %chance
+
+        __EX: 542000 75__
+        - - - - - - - - - - - - - - - - - - - - - - - - - -
+        **!opdp**
+        Calcs:
+        Army's mod/raw OP and DP
+
+        Format:
+        !opdp race U1 U2 U3 U4 5 MilSci(opt) MagSci(opt)
+
+        __EX: Orc 1 0 0 350000 23000 8 6__
+        - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+        `
     },
   });
   message.channel.send({

@@ -31,7 +31,9 @@ module.exports = (client, message, args) => {
   let rawUnits = 0;
   let rawUnknown = 0;
   let rawGTs = 0;
+  let rawMTs = 0;
   let GTs = 0;
+  let MTs = 0;
   let extraArmies = 0;
   let extraTroops = 0;
   let tempArray = 'N/A',Type = 'N/A', interm = 'N/A', Owner = 'N/A', Target='N/A', tempEndOwner='N/A', startTarget='N/A', endTarget='N/A', startOwner='N/A', endOwner='N/A', tempOwner = 'N/A';
@@ -49,8 +51,10 @@ module.exports = (client, message, args) => {
   if (args.length < 20) {
 
     Type = 'Army';
-    rawUnits = args.toString().split('\n').slice(1).toString().split(':').toString().split(',');
+    rawUnits = args.toString().split('\n').slice(1).toString().replace('Pony,riders','Pony riders').toString().split(':').toString().split(',');
     rawNames = args.toString().split('\n').slice(0,1).toString().split(',');
+    console.log(rawUnits);
+
 
     interm = rawNames.indexOf('from');
     Owner = rawNames.slice(interm+1).toString().split(',').join(' ');
@@ -61,10 +65,12 @@ module.exports = (client, message, args) => {
   else {
 
     Type = 'City';
-    rawUnits = args.toString().split(`\n`).slice(1, 7).toString().split(`,`).toString().split(`:`).toString().split(`,`);
+    rawUnits = args.toString().split(`\n`).slice(1, 7).toString().replace('Pony,riders','Pony riders').toString().split(':').toString().split(',');
     rawGTs = args.toString().split(`\n`).slice(12, 13).toString().split(`,`).slice(1, 2).toString().split(`:`);
+    rawMTs = args.toString().split(`\n`).slice(11, 12).toString().split(`,`).slice(1, 2).toString().split(`:`);
     rawUnknown = args.toString().split(`\n`).slice(19, 20).toString().split(`,`);
     GTs = rawGTs[1];
+    MTs = rawMTs[1];
     extraArmies = parseInt(rawUnknown[4]);
     extraTroops = parseInt(rawUnknown[6]);
 
@@ -131,6 +137,7 @@ module.exports = (client, message, args) => {
             ${race.u5.name}: ${numeral(units[4]).format("0,0")}
             ${race.u6.name}: ${numeral(units[5]).format("0,0")}
             ${race.u7.name}: ${numeral(units[6]).format("0,0")}
+            Magic Towers: ${numeral(MTs).format("0")}
             Extra Armies: ${numeral(extraArmies).format("0")}
             Extra Troops: ${numeral(extraTroops).format("0,0")}
             
