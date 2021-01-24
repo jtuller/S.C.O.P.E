@@ -1,9 +1,10 @@
 const shell = require("shelljs");
-let reportChannel = client.guilds.cache
+
+module.exports = (client, message, args) => {
+  let reportChannel = client.guilds.cache
   .get("772561311451185193")
   .channels.cache.get("802993476345921587");
 
-module.exports = (client, message, args) => {
   if (
     message.author.id === "298154814406131713" ||
     message.author.id === "394276895484805120"
