@@ -18,22 +18,21 @@ module.exports = (client, message, args) => {
       })
       shell.exec('~/S.C.O.P.E/reload.sh');
     })
-    }
-  else
-
+  }
+  else {
     let logged = {
       embed: {
         color: 15158332,
         description: `${message.author} attempted to redeploy the bot`,
       }
     }
-  reportChannel.send(logged).then(() => {
-    message.channel.send({
-      embed: {
-        color: 15158332,
-        description: `${message.author} tried to do something very stupid.`,
-      },
-    })
-  });
-
+    reportChannel.send(logged).then(() => {
+      message.channel.send({
+        embed: {
+          color: 15158332,
+          description: `${message.author} tried to do something very stupid.`,
+        },
+      })
+    });
+  }
 }

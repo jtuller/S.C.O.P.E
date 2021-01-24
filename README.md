@@ -2,7 +2,7 @@
 
 ## Welcome
 
-I am a discord bot made by Grand Moff & Percy of Visual Utopia!
+I am a discord bot made & maintained by Grand Moff & Percy of Visual Utopia!
 My name is S.C.O.P.E. or _Specific Calculation Of Power from EiTS_
 
 A list of my commands:
