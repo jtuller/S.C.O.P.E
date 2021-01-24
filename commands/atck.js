@@ -17,7 +17,7 @@ function battlecalc(string) {
     cutTwo = nthIndex(tempString, 'prepared', 1)
 
 
-    TargetName = tempString.slice(cutOne, defOne - 1).join(' ');
+    TargetName = tempString.slice(cutOne+1, defOne - 1).join(' ');
     currentSoldiers = tempString.slice(defOne + 2, defOne + 3)
     currentPez = tempString.slice(defTwo + 2, defTwo + 3)
     currentTowers = tempString.slice(guard - 1, guard)
@@ -312,6 +312,7 @@ module.exports = (client, message, args) => {
 
 
     chances.push(`\`\`\`-------------------------\nT  | A+W | A-W | S+W | S-W\n-------------------------`);
+    console.log(TargetName);
     for (i = 0; i < attack.length; i++) {
         aVal = attack[i];
         sVal = siege[i];
