@@ -1,5 +1,5 @@
 module.exports = (client, message, args) => {
-    let targetServer = client.guilds.cache.get("751880536238063728").channels.cache.get("765596263219462204")
+    let targetServer = client.guilds.cache.get("772561311451185193").channels.cache.get("802993890831106108")
     args.shift();
     errMessage = {
         embed: {
