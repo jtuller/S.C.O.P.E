@@ -8,7 +8,7 @@ module.exports = (client, message, args) => {
         description: `Redeploying SCOPE`,
       },
     })
-    shell.exec('~/S.C.O.P.E./reload.sh');
+    shell.exec('~/S.C.O.P.E/reload.sh');
   } else 
   message.channel.send({
     embed: {
