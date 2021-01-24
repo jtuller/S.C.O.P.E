@@ -2,24 +2,56 @@
 
 ## Welcome
 
-I am a discord bot made by Grand Moff of Visual Utopia!
+I am a discord bot made by Grand Moff & Percy of Visual Utopia!
 My name is S.C.O.P.E. or _Specific Calculation Of Power from EiTS_
 
-My commands include:
+A list of my commands:
 
-````!Dice````
-to return a random number between 0-100
+- - - - - - - - - - - - - - - - - - - - - - - - - -
+!eits
+Calcs:
+OP, DP, troop cost
 
+Format:
+!eits military(opt) magic(opt) "paste"
 
-````!opdp RACE U1 U2 U3 U4 U5 MIL MAG````
-to calculate the Offensive and Defensive power of an army based on a simple input.
+EX: !eits 7 4 "paste"
+- - - - - - - - - - - - - - - - - - - - - - - - - -
+!atck
+Calcs:
+Attack chances over prep duration
 
+Format:
+!atck military(opt) magic(opt) "paste"
 
-````
-!eits MIL MAG 
-```EITS PASTE DUMP```
-````
-to calculate the Offensive and Defensive power of an army based on pasting the results from an Eye in The Sky spell 
+EX: !atck 7 4 "paste"
+- - - - - - - - - - - - - - - - - - - - - - - - - -
+!range
+Calcs: MT range estimation
 
-````!atck MIL MAG   BATTLE REPORT PASTE DUMP ````
-Displays chances over all ticks left in prep if starting chances are 1% or greater
+Format: !range race number
+
+EX: !range elf 2500
+
+Note:
+over 200: MT input, tick output
+under 200: tick input, MT output
+- - - - - - - - - - - - - - - - - - - - - - - - - -
+!army
+Calcs:
+OP/DP ratio and enemy mod DP
+
+Format:
+!army youModOP %chance
+
+EX: 542000 75
+- - - - - - - - - - - - - - - - - - - - - - - - - -
+!opdp
+Calcs:
+Army's mod/raw OP and DP
+
+Format:
+!opdp race U1 U2 U3 U4 5 MilSci(opt) MagSci(opt)
+
+EX: Orc 1 0 0 350000 23000 8 6
+- - - - - - - - - - - - - - - - - - - - - - - - - -
