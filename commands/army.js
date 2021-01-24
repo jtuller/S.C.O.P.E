@@ -1,5 +1,6 @@
 const numeral = require("numeral");
 module.exports = (client, message, args) => {
+    console.log(args)
     let chance = 0, base = 0, exp = 0, expSign = 0, modChance = 0, x6=0, x5=0, x4=0, x3=0, x2=0, x1=0, x0=0, OPDPbase = 0, OPDPexp=0, OPDP = 0, DP = 0, OP = 0;
 
     OP = args[0];
