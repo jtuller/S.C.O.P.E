@@ -6,28 +6,14 @@ module.exports = (client, message) => {
   // Command and Argument Defining.
   let args = [];
   let command;
-  //EITS handled different due to argument being a string
-  if (
-    message.content.toLowerCase().startsWith("!eits") ||
-    message.content.toLowerCase().startsWith("+eits")
-  ) {
-    args = [
-      "eits",
-      message.content
-        .toLowerCase()
-        .substr(5, message.content.length - 5)
-        .trim(),
-    ];
-    command = "eits";
-  }
-  // ALl others handled standard
-  else {
-    args = message.content
-      .slice(client.config.prefix.length)
-      .trim()
-      .split(/ +/g);
-    command = args.shift().toLowerCase();
-  }
+
+  // All arguments now handled the same
+  args = message.content
+    .slice(client.config.prefix.length)
+    .trim()
+    .split(/ +/g);
+  command = args.shift().toLowerCase();
+  
   // Command Handling.
   let cmd = client.commands.get(command);
   if (!cmd) return;

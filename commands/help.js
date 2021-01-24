@@ -59,7 +59,28 @@ module.exports = (client, message, args) => {
 
         __EX: Orc 1 0 0 350000 23000 8 6__
         - - - - - - - - - - - - - - - - - - - - - - - - - -
+        **!prep**
+        Calcs:
+        Prep time given # troops, city icon size
 
+        Format:
+        !prep #Troops cityIconSize
+
+        __EX: 425000 4__
+
+        **Note:**
+        City size is based on VISUAL size
+        Not based on building count
+        - - - - - - - - - - - - - - - - - - - - - - - - - -
+        **!bugs**
+        Calcs:
+        Sends bugged command and message to devs for review
+
+        Format:
+        !bugs *paste all info, including !command*
+
+        __EX: !bugs !atck *battle report*__
+        - - - - - - - - - - - - - - - - - - - - - - - - - -
         `
     },
   });
