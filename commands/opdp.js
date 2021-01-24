@@ -1,7 +1,6 @@
 const numeral = require("numeral");
 const races = require("../resources/units");
 module.exports = (client, message, args) => {
-
   // verifies number of args
   if (args.length < 6 || args.length > 8) {
     message.channel.send({
@@ -77,12 +76,13 @@ module.exports = (client, message, args) => {
         },
         {
           name: "Army",
-          value: `${race.u1.name}: ${numeral(args[1]).format("0,0")}\n${race.u2.name
-            }: ${numeral(args[2]).format("0,0")}\n${race.u3.name}: ${numeral(
-              args[3]
-            ).format("0,0")}\n${race.u4.name}: ${numeral(args[4]).format(
-              "0,0"
-            )}\n${race.u5.name}: ${numeral(args[5]).format("0,0")}`,
+          value: `${race.u1.name}: ${numeral(args[1]).format("0,0")}\n${
+            race.u2.name
+          }: ${numeral(args[2]).format("0,0")}\n${race.u3.name}: ${numeral(
+            args[3]
+          ).format("0,0")}\n${race.u4.name}: ${numeral(args[4]).format(
+            "0,0"
+          )}\n${race.u5.name}: ${numeral(args[5]).format("0,0")}`,
           inline: true,
         },
         {

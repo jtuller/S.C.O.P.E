@@ -8,15 +8,12 @@ module.exports = (client, message) => {
   let command;
 
   // All arguments now handled the same
-  args = message.content
-    .slice(client.config.prefix.length)
-    .trim()
-    .split(/ +/g);
+  args = message.content.slice(client.config.prefix.length).trim().split(/ +/g);
   command = args.shift().toLowerCase();
-  
+
   // Command Handling.
   let cmd = client.commands.get(command);
   if (!cmd) return;
-  console.log(`${command} called by ${message.author} with arguments:${args}`)
+  console.log(`${command} called by ${message.author} with arguments:${args}`);
   cmd(client, message, args);
 };

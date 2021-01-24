@@ -81,7 +81,7 @@ module.exports = (client, message, args) => {
 
         __EX: !bugs !atck *battle report*__
         - - - - - - - - - - - - - - - - - - - - - - - - - -
-        `
+        `,
     },
   });
   message.channel.send({
