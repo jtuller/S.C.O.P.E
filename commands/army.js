@@ -1,26 +1,26 @@
 const numeral = require("numeral");
-module.exports = (client, message, args) => {
-  console.log(args);
+module.exports = (request) => {
+  console.log(request.args);
   let chance = 0,
-    base = 0,
-    exp = 0,
-    expSign = 0,
-    modChance = 0,
-    x6 = 0,
-    x5 = 0,
-    x4 = 0,
-    x3 = 0,
-    x2 = 0,
-    x1 = 0,
-    x0 = 0,
-    OPDPbase = 0,
-    OPDPexp = 0,
-    OPDP = 0,
-    DP = 0,
-    OP = 0;
+      base = 0,
+      exp = 0,
+      expSign = 0,
+      modChance = 0,
+      x6 = 0,
+      x5 = 0,
+      x4 = 0,
+      x3 = 0,
+      x2 = 0,
+      x1 = 0,
+      x0 = 0,
+      OPDPbase = 0,
+      OPDPexp = 0,
+      OPDP = 0,
+      DP = 0,
+      OP = 0;
 
-  OP = args[0];
-  chance = args[1] / 100;
+  OP = request.args[0];
+  chance = request.args[1] / 100;
 
   // Initialize Chance -> OPDP conversion
   base = 1 + Math.sign(Math.log10(chance / 0.5000000001));
@@ -48,13 +48,13 @@ module.exports = (client, message, args) => {
 
   DP = OP / OPDP;
 
-  message.channel.send({
+  return {
     embed: {
       color: 2123412,
       fields: [
         {
           name: `**DP requested by**`,
-          value: `${message.author}`,
+          value: `${request.author}`,
         },
         {
           name: `**Input**`,
@@ -70,6 +70,6 @@ module.exports = (client, message, args) => {
         },
       ],
     },
-  });
-  message.delete({ timeout: 1000 });
+  };
+
 };
